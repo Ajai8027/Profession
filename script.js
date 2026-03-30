@@ -180,6 +180,39 @@ document.querySelectorAll('.service-card, .portfolio-card, .testimonial-card, .p
     observer.observe(card);
 });
 
+// Portfolio filters + staggered reveal
+const portfolioFilters = document.querySelectorAll('.portfolio-filter');
+const portfolioCards = document.querySelectorAll('.portfolio-card');
+
+const setPortfolioStagger = () => {
+    let visibleIndex = 0;
+    portfolioCards.forEach(card => {
+        if (!card.classList.contains('is-hidden')) {
+            card.style.transitionDelay = `${visibleIndex * 90}ms`;
+            visibleIndex += 1;
+        }
+    });
+};
+
+setPortfolioStagger();
+
+portfolioFilters.forEach(filterBtn => {
+    filterBtn.addEventListener('click', () => {
+        const selected = filterBtn.dataset.filter;
+
+        portfolioFilters.forEach(btn => btn.classList.remove('active'));
+        filterBtn.classList.add('active');
+
+        portfolioCards.forEach(card => {
+            const cardCategory = card.dataset.category;
+            const shouldShow = selected === 'all' || cardCategory === selected;
+            card.classList.toggle('is-hidden', !shouldShow);
+        });
+
+        setPortfolioStagger();
+    });
+});
+
 // Active Nav Link on Scroll
 const sections = document.querySelectorAll('section');
 window.addEventListener('scroll', () => {

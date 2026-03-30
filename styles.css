@@ -320,6 +320,55 @@ body {
     background: linear-gradient(180deg, var(--glass-light), transparent);
 }
 
+.portfolio-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: -1rem 0 2.5rem;
+}
+
+.portfolio-meta span {
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--muted-text);
+    font-size: 0.88rem;
+}
+
+.portfolio-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+    margin-bottom: 2.2rem;
+}
+
+.portfolio-filter {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--muted-text);
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.portfolio-filter:hover {
+    color: var(--light-text);
+    border-color: rgba(59, 130, 246, 0.45);
+    transform: translateY(-2px);
+}
+
+.portfolio-filter.active {
+    color: #e8f0ff;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(139, 92, 246, 0.35));
+    border-color: rgba(139, 92, 246, 0.55);
+}
+
 .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -334,6 +383,10 @@ body {
     border-radius: 15px;
     overflow: hidden;
     transition: all 0.3s ease;
+}
+
+.portfolio-card.is-hidden {
+    display: none;
 }
 
 .portfolio-card:hover {
@@ -373,6 +426,36 @@ body {
     color: var(--muted-text);
     margin-bottom: 1rem;
     font-size: 0.95rem;
+}
+
+.portfolio-points {
+    list-style: none;
+    margin: 0 0 1rem;
+    display: grid;
+    gap: 0.4rem;
+}
+
+.portfolio-points li {
+    font-size: 0.9rem;
+    color: #dbe4f3;
+}
+
+.portfolio-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+}
+
+.portfolio-tags span {
+    font-size: 0.78rem;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: #c7d7ff;
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
+    background: rgba(59, 130, 246, 0.18);
+    border: 1px solid rgba(59, 130, 246, 0.25);
 }
 
 .view-project {
@@ -831,6 +914,15 @@ body {
     .portfolio-grid,
     .testimonials-grid {
         grid-template-columns: 1fr;
+    }
+
+    .portfolio-meta {
+        justify-content: flex-start;
+        margin-top: -0.5rem;
+    }
+
+    .portfolio-filters {
+        justify-content: flex-start;
     }
 }
 
