@@ -275,12 +275,22 @@
                         </div>
                     </div>
                 </div>
-                <form class="contact-form">
-                    <input type="text" placeholder="Your Name" required>
-                    <input type="email" placeholder="Your Email" required>
-                    <input type="tel" placeholder="Phone (Optional)">
-                    <textarea placeholder="Your Message" rows="5" required></textarea>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
+                <form
+                    class="contact-form"
+                    id="contactForm"
+                    action="https://formspree.io/f/mbdpolbz"
+                    method="POST"
+                    novalidate
+                >
+                    <input type="hidden" name="_subject" id="formSubject" value="New Website Enquiry - KarthickWebTech">
+                    <input type="hidden" name="_replyto" id="replyToField" value="">
+                    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="form-honeypot" aria-hidden="true">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                    <input type="tel" name="phone" placeholder="Phone (Optional)">
+                    <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                    <button type="submit" class="btn btn-primary" id="contactSubmitBtn">Send Message</button>
+                    <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
                 </form>
             </div>
         </div>

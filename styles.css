@@ -697,6 +697,29 @@ body {
     color: var(--muted-text);
 }
 
+.form-status {
+    min-height: 1.2rem;
+    font-size: 0.95rem;
+    color: var(--muted-text);
+}
+
+.form-status.success {
+    color: #22c55e;
+}
+
+.form-status.error {
+    color: #f87171;
+}
+
+.form-honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
 /* Footer */
 .footer {
     background: rgba(255, 255, 255, 0.08);

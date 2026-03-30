@@ -51,22 +51,96 @@ faqItems.forEach(item => {
 // Form Submission
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        // Get form values
-        const name = contactForm.querySelector('input[placeholder="Your Name"]').value;
-        const email = contactForm.querySelector('input[placeholder="Your Email"]').value;
-        const subject = contactForm.querySelector('input[placeholder="Subject"]').value;
-        const message = contactForm.querySelector('textarea').value;
-        
-        // Validate
-        if (name && email && message) {
-            // Show success message
-            alert(`Thank you, ${name}! Your message has been received. We'll get back to you soon.`);
-            contactForm.reset();
-        } else {
-            alert('Please fill in all required fields.');
+
+        const endpoint = contactForm.getAttribute('action');
+        const statusEl = document.getElementById('formStatus');
+        const submitBtn = document.getElementById('contactSubmitBtn');
+
+        if (!endpoint || endpoint.includes('yourFormId')) {
+            if (statusEl) {
+                statusEl.textContent = 'Formspree is not configured yet. Replace yourFormId with your Formspree form ID.';
+                statusEl.className = 'form-status error';
+            }
+            return;
+        }
+
+        const formData = new FormData(contactForm);
+        const name = (formData.get('name') || '').toString().trim();
+        const email = (formData.get('email') || '').toString().trim();
+        const message = (formData.get('message') || '').toString().trim();
+
+        const replyToField = document.getElementById('replyToField');
+        const subjectField = document.getElementById('formSubject');
+        if (replyToField) {
+            replyToField.value = email;
+        }
+        if (subjectField && name) {
+            subjectField.value = `New Website Enquiry from ${name}`;
+        }
+        formData.set('_replyto', email);
+        if (name) {
+            formData.set('_subject', `New Website Enquiry from ${name}`);
+        }
+
+        if (!name || !email || !message) {
+            if (statusEl) {
+                statusEl.textContent = 'Please fill in Name, Email, and Message.';
+                statusEl.className = 'form-status error';
+            }
+            return;
+        }
+
+        if (statusEl) {
+            statusEl.textContent = 'Sending your message...';
+            statusEl.className = 'form-status';
+        }
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+        }
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                contactForm.reset();
+                if (statusEl) {
+                    statusEl.textContent = `Thank you, ${name}! Your message has been sent successfully.`;
+                    statusEl.className = 'form-status success';
+                }
+            } else {
+                let errorMessage = 'Something went wrong. Please try again.';
+                try {
+                    const data = await response.json();
+                    if (data && data.errors && data.errors.length > 0 && data.errors[0].message) {
+                        errorMessage = data.errors[0].message;
+                    }
+                } catch (parseError) {
+                    // Keep fallback error message when response is not JSON.
+                }
+                if (statusEl) {
+                    statusEl.textContent = errorMessage;
+                    statusEl.className = 'form-status error';
+                }
+            }
+        } catch (error) {
+            if (statusEl) {
+                statusEl.textContent = 'Network error. Please check your connection and try again.';
+                statusEl.className = 'form-status error';
+            }
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
         }
     });
 }
