@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ajai Karthick | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep: #f2f3f6;
+      --bg-mid: #e4e7ed;
+      --bg-glow-a: #b9c2d6;
+      --bg-glow-b-rgb: 46, 255, 138;
+      --text-main: #1a2538;
+      --text-soft: #4e5b72;
+      --glass-bg: rgba(255, 255, 255, 0.52);
+      --glass-stroke: rgba(255, 255, 255, 0.78);
+      --glass-shadow: 0 18px 40px rgba(36, 45, 62, 0.14);
+      --green-main: #18e87a;
+      --green-rgb: 24, 232, 122;
+      --green-deep: #0d9f56;
+      --accent-1: #0bbf5b;
+      --accent-2: #18e87a;
+      --accent-3: #63ffb0;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --chip-bg: rgba(24, 232, 122, 0.14);
+    }
+
+    body.theme-pastel {
+      --bg-glow-b-rgb: 17, 181, 163;
+      --green-main: #11b5a3;
+      --green-rgb: 17, 181, 163;
+      --green-deep: #0d7f74;
+      --accent-1: #119a8f;
+      --accent-2: #11b5a3;
+      --accent-3: #38d3c3;
+      --chip-bg: rgba(17, 181, 163, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Sora", sans-serif;
+      color: var(--text-main);
+      min-height: 100vh;
+      background:
+        radial-gradient(1200px 650px at 10% -10%, rgba(185, 194, 214, 0.55), transparent 55%),
+        radial-gradient(1000px 500px at 95% 10%, rgba(var(--bg-glow-b-rgb), 0.28), transparent 55%),
+        linear-gradient(145deg, var(--bg-deep), var(--bg-mid));
+      overflow-x: hidden;
+      transition: background 320ms ease;
+    }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient::before,
+    .ambient::after {
+      content: "";
+      position: absolute;
+      filter: blur(60px);
+      opacity: 0.35;
+      animation: float 12s ease-in-out infinite alternate;
+    }
+
+    .ambient::before {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: var(--bg-glow-a);
+      top: 15%;
+      left: -50px;
+    }
+
+    .ambient::after {
+      width: 300px;
+      height: 300px;
+      border-radius: 40% 60% 50% 50%;
+      background: rgb(var(--bg-glow-b-rgb));
+      right: -60px;
+      bottom: 14%;
+      animation-delay: 1.8s;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 5;
+      border: 1px solid rgba(var(--green-rgb), 0.45);
+      background: rgba(255, 255, 255, 0.62);
+      color: #143049;
+      border-radius: 999px;
+      padding: 0.5rem 0.9rem;
+      font-family: "Sora", sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      backdrop-filter: blur(10px) saturate(130%);
+      -webkit-backdrop-filter: blur(10px) saturate(130%);
+      box-shadow: 0 8px 20px rgba(36, 45, 62, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+      transition: border-color 220ms ease, transform 180ms ease, box-shadow 220ms ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+      border-color: rgba(var(--green-rgb), 0.7);
+      box-shadow: 0 12px 24px rgba(var(--green-rgb), 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    }
+
+    .page {
+      width: min(1100px, 92vw);
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 1.4rem;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1.3px solid var(--glass-stroke);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(16px) saturate(145%);
+      -webkit-backdrop-filter: blur(16px) saturate(145%);
+      padding: 1.6rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(28px);
+      animation: reveal 750ms ease forwards;
+    }
+
+    .glass-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(var(--green-rgb), 0.44));
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .glass-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 6%;
+      width: 88%;
+      height: 38%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
+      border-radius: 0 0 24px 24px;
+      pointer-events: none;
+    }
+
+    .glass-card:nth-child(2) {
+      animation-delay: 120ms;
+    }
+
+    .glass-card:nth-child(3) {
+      animation-delay: 240ms;
+    }
+
+    .intro h1 {
+      font-size: clamp(1.9rem, 4.1vw, 3.1rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.9rem;
+    }
+
+    .accent {
+      background: linear-gradient(90deg, var(--accent-1) 0%, var(--accent-2) 58%, var(--accent-3) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .intro p {
+      max-width: 78ch;
+      color: var(--text-soft);
+      line-height: 1.75;
+      font-size: 0.98rem;
+    }
+
+    .meta {
+      margin-top: 1.1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: var(--chip-bg);
+      border: 1px solid rgba(var(--green-rgb), 0.52);
+      color: #0b5b30;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      font-size: 0.83rem;
+      font-weight: 500;
+      transition: border-color 220ms ease, background 220ms ease;
+    }
+
+    .section-head {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.2rem, 2.7vw, 1.8rem);
+      letter-spacing: -0.015em;
+      color: #173146;
+      text-shadow: 0 0 18px rgba(var(--green-rgb), 0.22);
+    }
+
+    .section-head span {
+      font-size: 0.78rem;
+      color: var(--green-deep);
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .skill-box {
+      background: rgba(255, 255, 255, 0.44);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: var(--radius-md);
+      padding: 0.95rem;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .skill-box:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.68);
+      border-color: rgba(var(--green-rgb), 0.65);
+      box-shadow: 0 14px 28px rgba(var(--green-rgb), 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.76);
+    }
+
+    .skill-box h3 {
+      font-size: 0.96rem;
+      margin-bottom: 0.45rem;
+      color: #182741;
+    }
+
+    .skill-box p {
+      color: var(--text-soft);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .achievement-list {
+      list-style: none;
+      display: grid;
+      gap: 0.72rem;
+    }
+
+    .achievement-list li {
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.48);
+      color: #26324a;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.74);
+      line-height: 1.6;
+      font-size: 0.92rem;
+    }
+
+    .achievement-list strong {
+      color: var(--green-deep);
+    }
+
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      from {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      to {
+        transform: translate3d(26px, -24px, 0) scale(1.08);
+      }
+    }
+
+    @media (max-width: 960px) {
+      .skills-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .theme-toggle {
+        top: 0.65rem;
+        right: 0.65rem;
+        padding: 0.45rem 0.75rem;
+      }
+
+      .page {
+        width: min(560px, 93vw);
+        padding-top: 1.3rem;
+      }
+
+      .glass-card {
+        padding: 1.1rem;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .intro p {
+        font-size: 0.93rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch green theme">Theme: Neon</button>
+
+  <main class="page">
+    <section class="glass-card intro" id="introduction">
+      <h1>Hello, I'm <span class="accent">V Ajith Kumar</span></h1>
+      <p>
+        UI/UX Designer and Front-End Developer with hands-on experience in designing intuitive and user-centered interfaces using Figma.
+        Skilled in wireframing, prototyping, and converting designs into responsive web layouts using HTML5, CSS3, and basic JavaScript.
+        Passionate about solving user problems and delivering impactful digital experiences.
+      </p>
+      <div class="meta">
+        <span class="chip">Role: UI-UX Designer</span>
+        <span class="chip">Location: Chennai, Tamil Nadu</span>
+        <span class="chip">Open to Opportunities</span>
+      </div>
+    </section>
+
+    <section class="glass-card" id="skills">
+      <div class="section-head">
+        <h2>Skills</h2>
+        <span>What I Do Best</span>
+      </div>
+      <div class="skills-grid">
+        <article class="skill-box">
+          <h3>Figma</h3>
+          <p>Designing clean wireframes, high-fidelity mockups, and interactive prototypes with user-first thinking.</p>
+        </article>
+        <article class="skill-box">
+          <h3>AI Modules</h3>
+          <p>Exploring and applying AI-based tools and modules to improve design and development workflows.</p>
+        </article>
+        <article class="skill-box">
+          <h3>Documentation Research</h3>
+          <p>Reading and analyzing technical documentation to adopt best practices and implement features effectively.</p>
+        </article>
+        <article class="skill-box">
+          <h3>Frontend Development</h3>
+          <p>Building responsive interfaces with HTML5, CSS3, and JavaScript that stay true to the design system.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="glass-card" id="certificates-awards-achievements">
+      <div class="section-head">
+        <h2>Certificates, Awards & Achievements</h2>
+        <span>Highlights</span>
+      </div>
+      <ul class="achievement-list">
+        <li><strong>UI/UX Internship - Iedeo Software Lab</strong> - Completed internship training focused on practical UI/UX design and real project collaboration.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    const themeToggle = document.getElementById("themeToggle");
+    const savedTheme = localStorage.getItem("portfolioTheme") || "neon";
+
+    function applyTheme(themeName) {
+      const isPastel = themeName === "pastel";
+      document.body.classList.toggle("theme-pastel", isPastel);
+      themeToggle.textContent = isPastel ? "Theme: Pastel" : "Theme: Neon";
+    }
+
+    applyTheme(savedTheme);
+
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = document.body.classList.contains("theme-pastel") ? "neon" : "pastel";
+      applyTheme(nextTheme);
+      localStorage.setItem("portfolioTheme", nextTheme);
+    });
+  </script>
+</body>
+</html>
